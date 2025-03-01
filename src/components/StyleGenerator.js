@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RefreshCw, Copy, Camera } from 'lucide-react';
-
+// Added a comment to force a new deployment
 const StyleGenerator = () => {
   const [prompt, setPrompt] = useState('');
   const [modifications, setModifications] = useState('');
