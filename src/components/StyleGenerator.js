@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
@@ -5,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, X, RefreshCw, Copy, Camera } from 'lucide-react';
+import { RefreshCw, Copy, Camera } from 'lucide-react';
 
 const StyleGenerator = () => {
   const [prompt, setPrompt] = useState('');
@@ -241,9 +242,11 @@ const StyleGenerator = () => {
                   }`}
                   onClick={() => setSelectedImage(image)}
                 >
-                  <img
+                  <image
                     src={image.url}
                     alt="Generated artwork"
+                    width=[400]
+                    height=[300]
                     className="w-full h-48 object-cover"
                   />
                 </div>
