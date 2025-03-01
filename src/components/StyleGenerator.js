@@ -242,11 +242,11 @@ const StyleGenerator = () => {
                   }`}
                   onClick={() => setSelectedImage(image)}
                 >
-                  <image
+                  <Image
                     src={image.url}
                     alt="Generated artwork"
-                    width=[400]
-                    height=[300]
+                    width={400}
+                    height={300}
                     className="w-full h-48 object-cover"
                   />
                 </div>
