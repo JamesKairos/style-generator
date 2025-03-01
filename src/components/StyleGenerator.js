@@ -103,23 +103,64 @@ const StyleGenerator = () => {
     return stylePrompt;
   };
 
-  const generateImages = () => {
+  const generateImages = async () => {
     setIsGenerating(true);
-    const stylePrompt = generateStylePrompt();
-    
-    // Simulate image generation with placeholders
-    setTimeout(() => {
-      const newImages = Array(4).fill(null).map((_, index) => ({
-        id: Date.now() + index,
-        url: `/api/placeholder/${400}/${400}`,
-        prompt: prompt,
-        stylePrompt: stylePrompt,
-        styles: [...styles]
-      }));
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt,
+          styles
+        })
+      });
       
-      setGeneratedImages(newImages);
+      const data = await response.json();
+      
+      // Replicate returns a prediction ID, not images directly
+      // We need to poll for the result
+      if (data.id) {
+        checkPredictionStatus(data.id);
+      } else {
+        setIsGenerating(false);
+        alert('Error generating images');
+      }
+    } catch (error) {
+      console.error('Error:', error);
       setIsGenerating(false);
-    }, 1500);
+    }
+  };
+  
+  // Add this new function to poll for results
+  const checkPredictionStatus = async (predictionId) => {
+    try {
+      const response = await fetch(`/api/check-prediction?id=${predictionId}`);
+      const data = await response.json();
+      
+      if (data.status === 'succeeded') {
+        // data.output should contain the image URLs
+        const newImages = data.output.map((url, index) => ({
+          id: Date.now() + index,
+          url: url,
+          prompt: prompt,
+          styles: [...styles]
+        }));
+        
+        setGeneratedImages(newImages);
+        setIsGenerating(false);
+      } else if (data.status === 'failed') {
+        setIsGenerating(false);
+        alert('Image generation failed');
+      } else {
+        // Still processing, check again in 1 second
+        setTimeout(() => checkPredictionStatus(predictionId), 1000);
+      }
+    } catch (error) {
+      console.error('Error checking prediction:', error);
+      setIsGenerating(false);
+    }
   };
 
   const modifyImage = () => {
