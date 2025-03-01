@@ -1,5 +1,7 @@
 export async function GET(request) {
     const { searchParams } = new URL(request.url);
+    // We'll use this variable later when uncommenting
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const id = searchParams.get('id');
     
     // For testing, return mock data

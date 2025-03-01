@@ -2,6 +2,8 @@ export async function POST(request) {
     try {
       // Get data from the request
       const data = await request.json();
+      // We'll use this variable later when uncommenting
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { prompt } = data;
       
       // For testing, return mock data
