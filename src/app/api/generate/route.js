@@ -34,6 +34,19 @@ export async function POST(request) {
       );
       
       const prediction = await response.json();
+      
+      // Add debugging
+      console.log("Replicate API response:", JSON.stringify(prediction));
+      
+      // Check if there's an error in the API response
+      if (prediction.error) {
+        console.error("Replicate API error:", prediction.error);
+        return new Response(JSON.stringify({ error: prediction.error }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      
       return new Response(JSON.stringify(prediction), {
         headers: { 'Content-Type': 'application/json' }
       });
