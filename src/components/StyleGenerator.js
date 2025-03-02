@@ -289,6 +289,7 @@ const StyleGenerator = () => {
                     width={400}
                     height={300}
                     className="w-full h-48 object-cover"
+                    unoptimized={true}
                   />
                 </div>
               ))}
