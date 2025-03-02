@@ -13,7 +13,7 @@ export async function POST(request) {
       const enhancedPrompt = `${prompt}. Style: ${stylePrompt}`;
       console.log("Sending prompt to Replicate:", enhancedPrompt);
       
-      // Call Replicate API with updated model version
+      // Call Replicate API with the SD 3.5 Large model
       const response = await fetch(
         "https://api.replicate.com/v1/predictions",
         {
@@ -23,11 +23,12 @@ export async function POST(request) {
             Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
           },
           body: JSON.stringify({
-            // Updated to a valid, current SDXL model version
-            version: "stability-ai/sdxl:c221b2b8ef527988fb59bf24a8b97c4561f1c671f73bd389f866bfb27c061316",
+            // Updated to Stable Diffusion 3.5 Large model
+            version: "stability-ai/stable-diffusion-3.5-large:6ec12be2a7e14876c026debdf959fb34979c6e521a5ab7da41e97c042c172855",
             input: {
               prompt: enhancedPrompt,
-              negative_prompt: "low quality, bad anatomy, distorted, blurry",
+              width: 1024,
+              height: 1024,
               num_outputs: 4
             },
           }),
