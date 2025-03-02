@@ -2,19 +2,18 @@ export async function POST(request) {
     try {
       // Get data from the request
       const data = await request.json();
-      // We'll use this variable later when uncommenting
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { prompt } = data;
+      const { prompt, styles } = data;
       
-      // For testing, return mock data
-      return new Response(JSON.stringify({
-        id: "test-prediction-id-" + Date.now(),
-        status: "starting"
-      }), {
-        headers: { 'Content-Type': 'application/json' }
-      });
+      // Create enhanced prompt with style information
+      const stylePrompt = styles
+        .sort((a, b) => b.weight - a.weight)
+        .map(style => `${Math.round(style.weight)}% ${style.name}`)
+        .join(", ");
       
-      /* Uncomment this when ready to connect to Replicate
+      const enhancedPrompt = `${prompt}. Style: ${stylePrompt}`;
+      console.log("Sending prompt to Replicate:", enhancedPrompt);
+      
+      // Call Replicate API
       const response = await fetch(
         "https://api.replicate.com/v1/predictions",
         {
@@ -26,7 +25,8 @@ export async function POST(request) {
           body: JSON.stringify({
             version: "stability-ai/sdxl:8beff3369e81422112d93b89ca01426147de542cd4684c244b673b105188fe5f",
             input: {
-              prompt: prompt,
+              prompt: enhancedPrompt,
+              negative_prompt: "low quality, bad anatomy, distorted, blurry",
               num_outputs: 4
             },
           }),
@@ -37,7 +37,6 @@ export async function POST(request) {
       return new Response(JSON.stringify(prediction), {
         headers: { 'Content-Type': 'application/json' }
       });
-      */
     } catch (error) {
       console.error("API error:", error);
       return new Response(JSON.stringify({ error: error.message || "Unknown error" }), {

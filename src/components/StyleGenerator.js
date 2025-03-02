@@ -119,29 +119,47 @@ const StyleGenerator = () => {
       
       const data = await response.json();
       
+      if (data.error) {
+        console.error("Error from API:", data.error);
+        setIsGenerating(false);
+        alert(`Error: ${data.error}`);
+        return;
+      }
+      
       // Replicate returns a prediction ID, not images directly
-      // We need to poll for the result
       if (data.id) {
         checkPredictionStatus(data.id);
       } else {
         setIsGenerating(false);
-        alert('Error generating images');
+        alert('Error: No prediction ID returned');
       }
     } catch (error) {
       console.error('Error:', error);
       setIsGenerating(false);
+      alert(`Error: ${error.message}`);
     }
   };
   
-  // Add this new function to poll for results
+  // Add this new function after generateImages:
   const checkPredictionStatus = async (predictionId) => {
     try {
       const response = await fetch(`/api/check-prediction?id=${predictionId}`);
       const data = await response.json();
       
+      if (data.error) {
+        console.error("Error checking prediction:", data.error);
+        setIsGenerating(false);
+        alert(`Error: ${data.error}`);
+        return;
+      }
+      
+      console.log("Prediction status:", data.status);
+      
       if (data.status === 'succeeded') {
-        // data.output should contain the image URLs
-        const newImages = data.output.map((url, index) => ({
+        // Format may vary depending on Replicate model
+        const outputUrls = data.output || [];
+        
+        const newImages = outputUrls.map((url, index) => ({
           id: Date.now() + index,
           url: url,
           prompt: prompt,
@@ -151,8 +169,9 @@ const StyleGenerator = () => {
         setGeneratedImages(newImages);
         setIsGenerating(false);
       } else if (data.status === 'failed') {
+        console.error("Generation failed:", data);
         setIsGenerating(false);
-        alert('Image generation failed');
+        alert('Image generation failed: ' + (data.error || 'Unknown error'));
       } else {
         // Still processing, check again in 1 second
         setTimeout(() => checkPredictionStatus(predictionId), 1000);
@@ -160,25 +179,41 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error checking prediction:', error);
       setIsGenerating(false);
+      alert(`Error checking generation status: ${error.message}`);
     }
   };
 
-  const modifyImage = () => {
+  const modifyImage = async () => {
     if (!selectedImage) return;
     
     setIsGenerating(true);
-    setTimeout(() => {
-      const newImages = Array(4).fill(null).map((_, index) => ({
-        id: Date.now() + index,
-        url: `/api/placeholder/${400}/${400}`,
-        prompt: prompt,
-        modifications: modifications,
-        styles: [...styles]
-      }));
+    try {
+      const modifiedPrompt = `${prompt}. ${modifications}`;
       
-      setGeneratedImages(newImages);
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt: modifiedPrompt,
+          styles
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.id) {
+        checkPredictionStatus(data.id);
+      } else {
+        setIsGenerating(false);
+        alert('Error generating modified images');
+      }
+    } catch (error) {
+      console.error('Error:', error);
       setIsGenerating(false);
-    }, 1500);
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const updateWeight = (index, newValue) => {
