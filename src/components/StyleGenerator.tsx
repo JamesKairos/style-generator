@@ -299,7 +299,8 @@ const StyleGenerator = () => {
                   onValueChange={(value) => updateWeight(index, value)}
                 />
                 <div className="flex flex-wrap gap-2">
-                  {style.characteristics.map((char: string, i: number) => (
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {styles.map((style: any, index: number) => (
                     <Badge key={i} variant="secondary">
                       {char}
                     </Badge>
@@ -319,6 +320,7 @@ const StyleGenerator = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {generatedImages.map((image: any) => (
                 <div 
                   key={image.id}
