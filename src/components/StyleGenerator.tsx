@@ -179,7 +179,7 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error checking prediction:', error);
       setIsGenerating(false);
-      console.error(`Error checking generation status: ${error.message}`);
+      console.error(`Error checking generation status:", error);
     }
   };
 
@@ -212,7 +212,7 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error:', error);
       setIsGenerating(false);
-      console.error(`Error: ${error.message}`);
+      console.error("Error description:", error);
     }
   };
 
