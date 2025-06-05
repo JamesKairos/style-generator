@@ -136,7 +136,7 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error:', error);
       setIsGenerating(false);
-      alert(`Error: ${error.message}`);
+      console.error("Error:", error);
     }
   };
   
@@ -149,7 +149,7 @@ const StyleGenerator = () => {
       if (data.error) {
         console.error("Error checking prediction:", data.error);
         setIsGenerating(false);
-        alert(`Error: ${data.error}`);
+        console.error(`Error: ${data.error}`);
         return;
       }
       
@@ -171,7 +171,7 @@ const StyleGenerator = () => {
       } else if (data.status === 'failed') {
         console.error("Generation failed:", data);
         setIsGenerating(false);
-        alert('Image generation failed: ' + (data.error || 'Unknown error'));
+        console.error('Image generation failed: ' + (data.error || 'Unknown error'));
       } else {
         // Still processing, check again in 1 second
         setTimeout(() => checkPredictionStatus(predictionId), 1000);
@@ -179,7 +179,7 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error checking prediction:', error);
       setIsGenerating(false);
-      alert(`Error checking generation status: ${error.message}`);
+      console.error(`Error checking generation status: ${error.message}`);
     }
   };
 
@@ -207,12 +207,12 @@ const StyleGenerator = () => {
         checkPredictionStatus(data.id);
       } else {
         setIsGenerating(false);
-        alert('Error generating modified images');
+        console.error('Error generating modified images');
       }
     } catch (error) {
       console.error('Error:', error);
       setIsGenerating(false);
-      alert(`Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
     }
   };
 
