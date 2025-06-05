@@ -159,7 +159,7 @@ const StyleGenerator = () => {
         // Format may vary depending on Replicate model
         const outputUrls = data.output || [];
         
-        const newImages = outputUrls.map((url, index) => ({
+        const newImages = outputUrls.map((url: string, index: number) => ({
           id: Date.now() + index,
           url: url,
           prompt: prompt,
