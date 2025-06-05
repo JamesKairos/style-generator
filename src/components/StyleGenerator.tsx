@@ -179,7 +179,7 @@ const StyleGenerator = () => {
     } catch (error) {
       console.error('Error checking prediction:', error);
       setIsGenerating(false);
-      console.error(`Error checking generation status:", error);
+      console.error("Error checking generation status:", error);
     }
   };
 
