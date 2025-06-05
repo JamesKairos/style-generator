@@ -299,12 +299,11 @@ const StyleGenerator = () => {
                   onValueChange={(value) => updateWeight(index, value)}
                 />
                 <div className="flex flex-wrap gap-2">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {styles.map((style: any, index: number) => (
-                    <Badge key={i} variant="secondary">
-                      {char}
-                    </Badge>
-                  ))}
+                 {style.characteristics.map((char: string, i: number) => (
+                  <Badge key={i} variant="secondary">
+                    {char}
+                  </Badge>
+                ))}
                 </div>
               </div>
             ))}
