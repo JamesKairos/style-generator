@@ -299,7 +299,7 @@ const StyleGenerator = () => {
                   onValueChange={(value) => updateWeight(index, value)}
                 />
                 <div className="flex flex-wrap gap-2">
-                  {style.characteristics.map((char, i) => (
+                  {style.characteristics.map((char: string, i: number) => (
                     <Badge key={i} variant="secondary">
                       {char}
                     </Badge>
@@ -319,7 +319,7 @@ const StyleGenerator = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              {generatedImages.map((image) => (
+              {generatedImages.map((image: any) => (
                 <div 
                   key={image.id}
                   className={`relative rounded-lg overflow-hidden cursor-pointer border-2 ${
