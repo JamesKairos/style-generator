@@ -141,7 +141,7 @@ const StyleGenerator = () => {
   };
   
   // Add this new function after generateImages:
-  const checkPredictionStatus = async (predictionId) => {
+  const checkPredictionStatus = async (predictionId: string) => {
     try {
       const response = await fetch(`/api/check-prediction?id=${predictionId}`);
       const data = await response.json();
@@ -216,7 +216,7 @@ const StyleGenerator = () => {
     }
   };
 
-  const updateWeight = (index, newValue) => {
+  const updateWeight = (index: number, newValue: number[]) => {
     const updatedStyles = [...styles];
     updatedStyles[index].weight = newValue[0];
     
