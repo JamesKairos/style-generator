@@ -122,7 +122,7 @@ const StyleGenerator = () => {
       if (data.error) {
         console.error("Error from API:", data.error);
         setIsGenerating(false);
-        alert(`Error: ${data.error}`);
+        console.error("Error", data.error || "No prediction ID returned");
         return;
       }
       
@@ -131,7 +131,7 @@ const StyleGenerator = () => {
         checkPredictionStatus(data.id);
       } else {
         setIsGenerating(false);
-        alert('Error: No prediction ID returned');
+        console.error("Error:", data.error || "No prediction ID returned");
       }
     } catch (error) {
       console.error('Error:', error);
@@ -249,8 +249,17 @@ const StyleGenerator = () => {
                 disabled={isGenerating || !prompt}
                 className="flex items-center gap-2"
               >
-                <Camera className="h-4 w-4" />
-                Generate Images
+                {isGenerating ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Camera className="h-4 w-4" />
+                    Generate Images
+                  </>
+                )}
               </Button>
               <Button
                 variant="outline"

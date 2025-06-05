@@ -24,12 +24,12 @@ export async function POST(request) {
           },
           body: JSON.stringify({
             // Updated to Stable Diffusion 3.5 Large model
-            version: "stability-ai/stable-diffusion-3.5-large:6ec12be2a7e14876c026debdf959fb34979c6e521a5ab7da41e97c042c172855",
+            version: "black-forest-labs/flux-schnell",
             input: {
               prompt: enhancedPrompt,
               width: 1024,
               height: 1024,
-              num_outputs: 4
+              num_outputs: 1
             },
           }),
         }
